@@ -1,5 +1,5 @@
 import calendar
-from datetime import date
+from datetime import date, timedelta
 from itertools import repeat
 
 
@@ -60,24 +60,21 @@ def make_span_list(count, lst, lst2):
     if count < len(lst) - 1:
         date1 = lst[count]
         date2 = lst[count + 1]
-        print(add_months(date1, 6))
         if add_months(date1, 6) != date2:
-            new_list = lst2 + [(date2 - date1)]
-            print('not equal')
+            new_date1 = add_months(date1, 6)
+            new_date2 = date2 - timedelta(days=1)
+            span = '{}/{}/{} - {}/{}/{}'.format(new_date1.month, new_date1.day, new_date1.year, new_date2.month, new_date2.day, new_date2.year)
+            new_list = lst2 + [span]
             return make_span_list((count + 1), lst, new_list)
         elif add_months(date1, 6) == date2:
             new_list = lst2
-            print('equal')
             return make_span_list((count + 1), lst, new_list)
     else:
         return lst2
 
 
 def vs_term():
-    date_list = make_date_list(
-        make_term_list(
-            get_terms(0, get_input('How many terms total?\n'), [])))
-    print_all(make_span_list(0, date_list, []))
+    print_all(make_span_list(0, (make_date_list(make_term_list(get_terms(0, get_input('How many terms total?\n'), [])))), []))
 
 
 if __name__ == "__main__":
