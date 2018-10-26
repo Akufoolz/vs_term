@@ -36,8 +36,14 @@ def add_months(in_date, months):
 
 def get_terms(count, total, lst):
     if count < int(total):
-        new_list = lst + [(get_input('Enter term date\n'))]
-        return get_terms((count + 1), total, new_list)
+        new_input = get_input('Enter term {} date:\n'.format(count + 1))
+        if len(new_input) == 6:
+            new_list = lst + [new_input]
+            return get_terms((count + 1), total, new_list)
+        else:
+            print('Term date must only have six numbers, please try again.')
+            new_list = lst
+            return get_terms(count, total, new_list)
     else:
         return lst
 
@@ -63,7 +69,13 @@ def make_span_list(count, lst, lst2):
         if add_months(date1, 6) != date2:
             new_date1 = add_months(date1, 6)
             new_date2 = date2 - timedelta(days=1)
-            span = '{}/{}/{} - {}/{}/{}'.format(new_date1.month, new_date1.day, new_date1.year, new_date2.month, new_date2.day, new_date2.year)
+            span = '{}/{}/{} - {}/{}/{}'.format(
+                                                new_date1.month,
+                                                new_date1.day,
+                                                new_date1.year,
+                                                new_date2.month,
+                                                new_date2.day,
+                                                new_date2.year)
             new_list = lst2 + [span]
             return make_span_list((count + 1), lst, new_list)
         elif add_months(date1, 6) == date2:
@@ -74,7 +86,14 @@ def make_span_list(count, lst, lst2):
 
 
 def vs_term():
-    print_all(make_span_list(0, (make_date_list(make_term_list(get_terms(0, get_input('How many terms total?\n'), [])))), []))
+    print_all(
+        make_span_list(0, (
+            make_date_list(
+                make_term_list(
+                    get_terms(
+                        0,
+                        get_input('How many terms total?\n'),
+                        [])))), []))
 
 
 if __name__ == "__main__":
