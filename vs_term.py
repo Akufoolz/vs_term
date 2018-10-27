@@ -67,16 +67,21 @@ def make_span_list(count, lst, lst2):
         date1 = lst[count]
         date2 = lst[count + 1]
         if add_months(date1, 6) != date2:
-            new_date1 = add_months(date1, 6)
-            new_date2 = date2 - timedelta(days=1)
-            span = '{}/{}/{} - {}/{}/{}'.format(
-                                                new_date1.month,
-                                                new_date1.day,
-                                                new_date1.year,
-                                                new_date2.month,
-                                                new_date2.day,
-                                                new_date2.year)
-            new_list = lst2 + [span]
+            if ((date2 - date1) > (timedelta(days=180))):
+                new_date1 = add_months(date1, 6)
+                new_date2 = date2 - timedelta(days=1)
+                span = '{}/{}/{} - {}/{}/{}'.format(
+                                                    new_date1.month,
+                                                    new_date1.day,
+                                                    new_date1.year,
+                                                    new_date2.month,
+                                                    new_date2.day,
+                                                    new_date2.year)
+                new_list = lst2 + [span]
+
+            elif ((date2 - date1) < (timedelta(days=180))):
+                new_list = lst2 + [
+                        'ERROR: Term dates less than 6 months apart.']
             return make_span_list((count + 1), lst, new_list)
         elif add_months(date1, 6) == date2:
             new_list = lst2
